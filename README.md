@@ -3,9 +3,10 @@
 
 Gestor de tareas que te avisa por email cuando una tarea vence hoy. Simple, sin complicaciones.
 
-<div style="display: flex; justify-content: center; width: 100%;">
-    <img width="350" height="auto" alt="autotask_api" src="https://github.com/user-attachments/assets/1513119e-fead-4d52-ae3b-57fd5450e95d" style="display: block;" /img>
-</div>
+<img style="display: block; margin: 0 auto; max-width: 100%; height: auto;" 
+     width="350" 
+     alt="autotask_api" 
+     src="https://github.com/user-attachments/assets/1513119e-fead-4d52-ae3b-57fd5450e95d" />
 
 ## ¿Qué hace?
 
