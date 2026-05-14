@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoTask API - Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: #fff;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #444;
+        }
+
+        .form-group label .required {
+            color: #dc3545;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #0066cc;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #0066cc;
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background-color: #0052a3;
+        }
+
+        .btn-primary:disabled {
+            background-color: #99c2ff;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .tasks-section {
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tasks-section h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .task-list {
+            list-style: none;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            background: #fafafa;
+        }
+
+        .task-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .task-meta {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .task-meta span {
+            margin-right: 15px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .badge-pendiente {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-completado {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .badge-notificado {
+            background-color: #cce5ff;
+            color: #004085;
+        }
+
+        .priority-alta {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .priority-media {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .priority-baja {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 8px;
+            margin-left: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #1a1a1a;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .task-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .task-actions {
+                margin-left: 0;
+                margin-top: 12px;
+                width: 100%;
+            }
+
+            .task-actions .btn {
+                flex: 1;
+            }
+        }
+
+        .session-mode-selector {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .session-mode-selector h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+        }
+
+        .mode-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .mode-option {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .mode-option:hover {
+            border-color: #0066cc;
+            background: #f0f7ff;
+        }
+
+        .mode-option.active {
+            border-color: #0066cc;
+            background: #e6f2ff;
+            font-weight: 600;
+        }
+
+        .mode-option .mode-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .mode-option .mode-desc {
+            font-size: 12px;
+            color: #666;
+            font-weight: normal;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AutoTask API</h1>
+            <p>Sistema de gestión de tareas con notificaciones automáticas por correo electrónico.</p>
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button class="btn btn-secondary" onclick="logout()">Cerrar Sesión</button>
+                <button class="btn btn-danger" onclick="deleteSession()">Eliminar Sesión</button>
+            </div>
+        </header>
+
+        <div id="message-container"></div>
+
+        <section class="session-mode-selector">
+            <h3>Modo de Sesión</h3>
+            <div class="mode-options">
+                <div class="mode-option active" id="mode-temporal" onclick="setSessionMode('temporal')">
+                    <div class="mode-title">Temporal (15 min)</div>
+                    <div class="mode-desc">Se limpia automáticamente tras 15 minutos</div>
+                </div>
+                <div class="mode-option" id="mode-permanente" onclick="setSessionMode('permanente')">
+                    <div class="mode-title">Permanente</div>
+                    <div class="mode-desc">Los datos persisten hasta borrarlos manualmente</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h2>Crear Nueva Tarea</h2>
+            <form id="task-form">
+                <div class="form-group">
+                    <label for="title">Título <span class="required">*</span></label>
+                    <input type="text" id="title" name="title" required placeholder="Ej: Completar informe mensual">
+                </div>
+                <div class="form-group">
+                    <label for="description">Descripción</label>
+                    <textarea id="description" name="description" placeholder="Detalles adicionales de la tarea"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="category">Categoría / Proyecto</label>
+                    <input type="text" id="category" name="category" placeholder="Ej: Trabajo, Personal, Estudio">
+                </div>
+                <div class="form-row" style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="priority">Prioridad <span class="required">*</span></label>
+                        <select id="priority" name="priority" required>
+                            <option value="alta">Alta</option>
+                            <option value="media" selected>Media</option>
+                            <option value="baja">Baja</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="due_date">Fecha Límite <span class="required">*</span></label>
+                        <input type="date" id="due_date" name="due_date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="owner_email">Email del Propietario <span class="required">*</span></label>
+                    <input type="email" id="owner_email" name="owner_email" required placeholder="usuario@ejemplo.com">
+                </div>
+                <button type="submit" class="btn btn-primary" id="submit-btn">Crear Tarea</button>
+            </form>
+        </section>
+
+        <section class="tasks-section">
+            <h2>Tareas Existentes</h2>
+            <div id="tasks-container">
+                <div class="loading">Cargando tareas...</div>
+            </div>
+        </section>
+
+        <footer style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+            <div id="session-mode-info">Sesión automática: se limpia tras 15 min de inactividad o al cerrar el navegador.</div>
+        </footer>
+    </div>
+
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <h2>Editar Tarea</h2>
+            <form id="edit-form">
+                <input type="hidden" id="edit-id">
+                <div class="form-group">
+                    <label for="edit-title">Título <span class="required">*</span></label>
+                    <input type="text" id="edit-title" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-description">Descripción</label>
+                    <textarea id="edit-description" name="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="edit-category">Categoría / Proyecto</label>
+                    <input type="text" id="edit-category" name="category">
+                </div>
+                <div class="form-row" style="display: flex; gap: 15px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="edit-priority">Prioridad <span class="required">*</span></label>
+                        <select id="edit-priority" name="priority" required>
+                            <option value="alta">Alta</option>
+                            <option value="media">Media</option>
+                            <option value="baja">Baja</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="edit-due_date">Fecha Límite <span class="required">*</span></label>
+                        <input type="date" id="edit-due_date" name="due_date" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="edit-owner_email">Email del Propietario <span class="required">*</span></label>
+                    <input type="email" id="edit-owner_email" name="owner_email" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="submit" class="btn btn-primary" id="edit-submit-btn">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeEditModal()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        const messageContainer = document.getElementById('message-container');
+        const tasksContainer = document.getElementById('tasks-container');
+        const taskForm = document.getElementById('task-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const editModal = document.getElementById('edit-modal');
+        const editForm = document.getElementById('edit-form');
+
+        function showMessage(message, type) {
+            const className = type === 'success' ? 'success-message' : 'error-message';
+            messageContainer.innerHTML = `<div class="${className}">${message}</div>`;
+            setTimeout(() => {
+                messageContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        function showError(message) {
+            showMessage(message, 'error');
+        }
+
+        function showSuccess(message) {
+            showMessage(message, 'success');
+        }
+
+        function validateDate(dateStr) {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const dueDate = new Date(dateStr);
+            return dueDate >= today;
+        }
+
+        function validateEmail(email) {
+            const pattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            return pattern.test(email);
+        }
+
+        async function fetchTasks() {
+            try {
+                const response = await fetch(`${API_BASE}/tasks`);
+                if (!response.ok) throw new Error('Error al cargar tareas');
+                const tasks = await response.json();
+                renderTasks(tasks);
+            } catch (error) {
+                tasksContainer.innerHTML = '<div class="empty-state">No se pudieron cargar las tareas. Verifica que el servidor esté ejecutándose.</div>';
+                showError(error.message);
+            }
+        }
+
+        function renderTasks(tasks) {
+            if (tasks.length === 0) {
+                tasksContainer.innerHTML = '<div class="empty-state">No hay tareas registradas. Crea una nueva tarea arriba.</div>';
+                return;
+            }
+
+            const taskList = document.createElement('ul');
+            taskList.className = 'task-list';
+
+            tasks.forEach(task => {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+
+                const badgeClass = `badge-${task.status}`;
+                const statusText = task.status.charAt(0).toUpperCase() + task.status.slice(1);
+                const priorityClass = `priority-${task.priority || 'media'}`;
+                const priorityText = (task.priority || 'media').charAt(0).toUpperCase() + (task.priority || 'media').slice(1);
+
+                li.innerHTML = `
+                    <div class="task-info">
+                        <div class="task-title">${escapeHtml(task.title)}</div>
+                        <div class="task-meta">
+                            <span>📅 ${escapeHtml(task.due_date)}</span>
+                            <span>✉️ ${escapeHtml(task.owner_email)}</span>
+                            ${task.category ? `<span>📁 ${escapeHtml(task.category)}</span>` : ''}
+                            <span class="badge ${priorityClass}">${priorityText}</span>
+                            <span class="badge ${badgeClass}">${statusText}</span>
+                        </div>
+                    </div>
+                    <div class="task-actions">
+                        ${task.status !== 'completado' ? `<button class="btn btn-success" onclick="completeTask(${task.id})">Completar</button>` : ''}
+                        <button class="btn btn-secondary" onclick="openEditModal(${task.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteTask(${task.id})">Eliminar</button>
+                    </div>
+                `;
+
+                taskList.appendChild(li);
+            });
+
+            tasksContainer.innerHTML = '';
+            tasksContainer.appendChild(taskList);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function openEditModal(taskId) {
+            fetch(`${API_BASE}/tasks`)
+                .then(response => response.json())
+                .then(tasks => {
+                    const task = tasks.find(t => t.id === taskId);
+                    if (task) {
+                        document.getElementById('edit-id').value = task.id;
+                        document.getElementById('edit-title').value = task.title;
+                        document.getElementById('edit-description').value = task.description || '';
+                        document.getElementById('edit-category').value = task.category || '';
+                        document.getElementById('edit-priority').value = task.priority || 'media';
+                        document.getElementById('edit-due_date').value = task.due_date;
+                        document.getElementById('edit-owner_email').value = task.owner_email;
+                        editModal.classList.add('active');
+                    }
+                })
+                .catch(error => {
+                    showError('Error al cargar datos de la tarea');
+                });
+        }
+
+        function closeEditModal() {
+            editModal.classList.remove('active');
+        }
+
+        async function createTask(event) {
+            event.preventDefault();
+            
+            const formData = {
+                title: document.getElementById('title').value,
+                description: document.getElementById('description').value || '',
+                category: document.getElementById('category').value || '',
+                priority: document.getElementById('priority').value,
+                due_date: document.getElementById('due_date').value,
+                owner_email: document.getElementById('owner_email').value
+            };
+
+            if (!validateDate(formData.due_date)) {
+                showError('La fecha límite no puede ser una fecha pasada');
+                return;
+            }
+
+            if (!validateEmail(formData.owner_email)) {
+                showError('El email no es válido');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creando...';
+
+            try {
+                const response = await fetch(`${API_BASE}/tasks`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Error al crear tarea');
+                }
+
+                taskForm.reset();
+                showSuccess('Tarea creada exitosamente');
+                fetchTasks();
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Crear Tarea';
+            }
+        }
+
+        async function updateTask(event) {
+            event.preventDefault();
+            
+            const taskId = document.getElementById('edit-id').value;
+            const formData = {
+                title: document.getElementById('edit-title').value,
+                description: document.getElementById('edit-description').value || '',
+                category: document.getElementById('edit-category').value || '',
+                priority: document.getElementById('edit-priority').value,
+                due_date: document.getElementById('edit-due_date').value,
+                owner_email: document.getElementById('edit-owner_email').value
+            };
+
+            if (!validateDate(formData.due_date)) {
+                showError('La fecha límite no puede ser una fecha pasada');
+                return;
+            }
+
+            if (!validateEmail(formData.owner_email)) {
+                showError('El email no es válido');
+                return;
+            }
+
+            const editSubmitBtn = document.getElementById('edit-submit-btn');
+            editSubmitBtn.disabled = true;
+            editSubmitBtn.textContent = 'Guardando...';
+
+            try {
+                const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Error al actualizar tarea');
+                }
+
+                closeEditModal();
+                showSuccess('Tarea actualizada exitosamente');
+                fetchTasks();
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                editSubmitBtn.disabled = false;
+                editSubmitBtn.textContent = 'Guardar Cambios';
+            }
+        }
+
+        async function completeTask(taskId) {
+            try {
+                const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ status: 'completado' })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Error al completar tarea');
+                }
+
+                showSuccess('Tarea completada exitosamente');
+                fetchTasks();
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        async function deleteTask(taskId) {
+            if (!confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/tasks/${taskId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Error al eliminar tarea');
+                }
+
+                showSuccess('Tarea eliminada exitosamente');
+                fetchTasks();
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        editForm.addEventListener('submit', updateTask);
+        taskForm.addEventListener('submit', createTask);
+        
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('due_date').setAttribute('min', today);
+        document.getElementById('edit-due_date').setAttribute('min', today);
+        
+        function getSessionMode() {
+            return localStorage.getItem('sessionMode') || 'temporal';
+        }
+
+        function setSessionMode(mode) {
+            localStorage.setItem('sessionMode', mode);
+            updateSessionModeUI();
+            updateSessionModeInfo();
+        }
+
+        function updateSessionModeUI() {
+            const mode = getSessionMode();
+            const temporalOption = document.getElementById('mode-temporal');
+            const permanenteOption = document.getElementById('mode-permanente');
+            
+            if (mode === 'permanente') {
+                temporalOption.classList.remove('active');
+                permanenteOption.classList.add('active');
+            } else {
+                temporalOption.classList.add('active');
+                permanenteOption.classList.remove('active');
+            }
+        }
+
+        function updateSessionModeInfo() {
+            const mode = getSessionMode();
+            const infoElement = document.getElementById('session-mode-info');
+            
+            if (mode === 'permanente') {
+                infoElement.textContent = 'Modo Permanente: Los datos persisten hasta que los borres manualmente.';
+            } else {
+                infoElement.textContent = 'Sesión automática: se limpia tras 15 min de inactividad o al cerrar el navegador.';
+            }
+        }
+
+        function logout() {
+            document.cookie = 'session_id=; Path=/; Max-Age=0';
+            window.location.href = '/login';
+        }
+
+        async function deleteSession() {
+            if (!confirm('¿Estás seguro de eliminar todas tus tareas? Esta acción no se puede deshacer.')) {
+                return;
+            }
+            try {
+                const tasks = await fetchTasksData();
+                for (const task of tasks) {
+                    await fetch(`${API_BASE}/tasks/${task.id}`, { method: 'DELETE' });
+                }
+                showSuccess('Todas las tareas han sido eliminadas.');
+                fetchTasks();
+            } catch (err) {
+                showError('Error al eliminar las tareas.');
+            }
+        }
+
+        async function fetchTasksData() {
+            const res = await fetch(`${API_BASE}/tasks`);
+            if (!res.ok) return [];
+            return await res.json();
+        }
+
+        updateSessionModeUI();
+        updateSessionModeInfo();
+        
+        fetchTasks();
+    </script>
+</body>
+</html>
